@@ -1,0 +1,10 @@
+{
+  "name": "raft-kv",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^22.20.2",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3"
+  }
+}
