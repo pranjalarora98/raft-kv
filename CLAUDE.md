@@ -55,6 +55,25 @@ Stage 1 design, as I worked it out:
 8. A heartbeat from the current term's leader restarts the countdown. A
    candidate in that term gives up and becomes a follower, keeping its vote.
 
+Where I left off (2026-09-28):
+
+- Written in `node.ts`: constructor (starts the countdown, wires `listen`),
+  `restartCountDown`, `startElection` (sends vote requests, counts replies),
+  `makeLeader`, `sendHeartbeat`; `sendAnswer` and `stepDown` partly.
+- Open fixes:
+  1. `makeLeader`: store the `setInterval` in `this.heartbeatTimer`. Without
+     it a leader that steps down keeps sending heartbeats with its new term.
+  2. `sendAnswer` (answering a vote request): on a bigger term, call
+     `stepDown` and fall through instead of returning; add the same-term case
+     (rule 5); record the vote; restart the countdown when voting yes. Order:
+     step down → decide the vote → return the reply.
+  3. `stepDown`: restart the countdown; only clear the vote when the term
+     actually changes.
+- Still to write: answering a heartbeat (`'isAlive'`) and its line in the
+  `listen` router.
+- Then: Claude adds `src/main.ts` and run scripts; I add log lines for role
+  changes and run three nodes to watch the first election.
+
 ## The stages
 
 1. **Leader election** — three nodes agree on exactly one leader, and killing
