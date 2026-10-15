@@ -54,12 +54,13 @@ export class Node {
   }
 
   private stepDown(newTerm: number) {
-    if (this.currentTerm < newTerm) this.currentTerm = newTerm;
-
+    if (this.currentTerm < newTerm){
+       this.currentTerm = newTerm;
+           this.currentVote = null;
+    }
     this.role = "follower";
-    this.currentVote = null;
 
-    if (this.heartbeatTimer) clearTimeout(this.heartbeatTimer);
+    if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
 
     this.heartbeatTimer = null;
   }
@@ -75,7 +76,7 @@ export class Node {
    this.electionTimer = null;
    this.sendHeartbeat();
 
-   setInterval(() => {
+   this.heartbeatTimer = setInterval(() => {
     this.sendHeartbeat();
    },500);
   }
